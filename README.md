@@ -1,2 +1,4 @@
-# coursera_dss_developingdataproducts_assignments
-Coursera's Data Science Specialization Developing Data Products Assignments
+# Coursera Data Science Specialization
+## Developing Data Products
+### Course;s Assignments
+This repository contains all the assignments produced as part of the abovementioned MOOC course
