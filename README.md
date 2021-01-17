@@ -1,0 +1,2 @@
+# coursera_dss_developingdataproducts_assignments
+Coursera's Data Science Specialization Developing Data Products Assignments
