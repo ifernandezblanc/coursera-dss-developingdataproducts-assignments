@@ -3,10 +3,8 @@ library(knitr)
 library(leaflet)
 library(fontawesome)
 library(dplyr)
-# Set public URLs for ski data and icon available from web
+# Download ski data from public URL omitting rows with NA values and pre-process
 skiURL <- "https://gist.githubusercontent.com/Ewiseman/b251e5eaf70ca52a4b9b10dce9e635a4/raw/9f0100fe14169a058c451380edca3bda24d3f673/ski_resort_stats.csv"
-iconURL <- "https://github.com/ifernandezblanc/coursera_dss_developingdataproducts_assignments/blob/gh-pages/week2/resources/skiicon.png"
-# Download ski data omitting rows with NA values and pre-process
 skiData <- na.omit(read.csv(url(skiURL)))
 # Identify the highest percentage of slope types (green, blue or black)
 skiData <- skiData %>% 
@@ -20,7 +18,12 @@ skiData <- skiData %>%
 skiMap <- leaflet(data = skiData) %>% 
   addTiles() %>% 
   addAwesomeMarkers(~lon, ~lat,
-                    icon = makeAwesomeIcon(icon = "skiing", library = "fa",
-                                           iconColor = "white",
+                    icon = makeAwesomeIcon(text = fa(name = "skiing",
+                                                     fill = "white"), 
                                            markerColor = ~slope_trend),
                     popup = ~resort_name)
+# Create secondary map using cluster options to simplify map
+# Clusters' markers will be colored according to the max of sums of slop_trend colors
+skiMapCluster
+
+
