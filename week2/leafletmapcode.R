@@ -23,7 +23,16 @@ skiMap <- leaflet(data = skiData) %>%
                                            markerColor = ~slope_trend),
                     popup = ~resort_name)
 # Create secondary map using cluster options to simplify map
-# Clusters' markers will be colored according to the max of sums of slop_trend colors
-skiMapCluster
-
-
+# Legend will be added to show meaning of markers' color
+skiLegend <- c("#72AF26", "#36A4D5", "#303030")
+skiMapCluster <- leaflet(data = skiData) %>% 
+  addTiles() %>% 
+  addAwesomeMarkers(~lon, ~lat,
+                    icon = makeAwesomeIcon(text = fa(name = "skiing",
+                                                     fill = "white"), 
+                                           markerColor = ~slope_trend),
+                    popup = ~resort_name,
+                    clusterOptions = markerClusterOptions()) %>%
+  addLegend(position = "bottomright", title = "Resort slopes' difficulty",
+            labels = c("Easy", "Medium", "Hard"), 
+            colors = skiLegend)

@@ -1,0 +1,78 @@
+---
+title: "US Ski resorts - Leaflet Map"
+author: "Iñigo Fernández del Amo"
+date: "1/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Developing Data Products - Week 2 Assignment
+
+## Executive summary
+
+The purpose of this work is to display two maps (unclustered and clustered) showing the US ski resorts with markers colored by the level of difficulty of their slopes.
+
+The data utilized for this work is publicly available and can be found [**here**](!https://gist.githubusercontent.com/Ewiseman/b251e5eaf70ca52a4b9b10dce9e635a4/raw/9f0100fe14169a058c451380edca3bda24d3f673/ski_resort_stats.csv)
+
+```{r}
+# Libraries used for this work
+library(knitr)
+library(leaflet)
+library(fontawesome)
+library(dplyr)
+# US ski resorts data url
+skiURL <- "https://gist.githubusercontent.com/Ewiseman/b251e5eaf70ca52a4b9b10dce9e635a4/raw/9f0100fe14169a058c451380edca3bda24d3f673/ski_resort_stats.csv"
+```
+
+## US Ski resorts - Unclustered map
+
+The first map shows all the ski resorts in the US through markers colored by their slopes' most common level of difficulty and popping-up the ski resort's name.
+
+```{r}
+# Download ski data from public URL omitting rows with NA values and pre-process
+skiData <- na.omit(read.csv(url(skiURL)))
+# Identify the highest percentage of slope types (green, blue or black)
+skiData <- skiData %>% 
+  mutate (slope_trend = 
+            if_else(green_percent >= blue_percent, 
+                    if_else(green_percent >= black_percent, 'green', 'black'), 
+                    if_else(blue_percent >= black_percent, 'blue', 'black')))
+# Create map using ad-hoc icons from font awesome: https://github.com/rstudio/fontawesome
+# Markers will be colored according to slope_trend
+# Markers will have as pop-up the ski resort_name
+skiMap <- leaflet(data = skiData) %>% 
+  addTiles() %>% 
+  addAwesomeMarkers(~lon, ~lat,
+                    icon = makeAwesomeIcon(text = fa(name = "skiing",
+                                                     fill = "white"), 
+                                           markerColor = ~slope_trend),
+                    popup = ~resort_name)
+skiMap
+```
+
+## US Ski resorts - Clustered map
+
+The second map shows all the US ski resorts similarly to the first, although this time they are clustered and there is a legend to identify the color with the slopes' level of difficulty.
+
+```{r}
+# Legend will be added to show meaning of markers' color
+skiLegend <- c("#72AF26", "#36A4D5", "#303030")
+# Create secondary map using cluster options to simplify map
+skiMapCluster <- leaflet(data = skiData) %>% 
+  addTiles() %>% 
+  addAwesomeMarkers(~lon, ~lat,
+                    icon = makeAwesomeIcon(text = fa(name = "skiing",
+                                                     fill = "white"), 
+                                           markerColor = ~slope_trend),
+                    popup = ~resort_name,
+                    options = markerOptions(trend = ~slope_trend),
+                    clusterOptions = markerClusterOptions()) %>%
+  addLegend(position = "bottomright", title = "Resort slopes' difficulty",
+            labels = c("Easy", "Medium", "Hard"), 
+            colors = skiLegend)
+skiMapCluster
+```
+
