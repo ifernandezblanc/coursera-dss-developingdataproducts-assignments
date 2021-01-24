@@ -17,7 +17,7 @@ The purpose of this work is to display two maps (unclustered and clustered) show
 
 The data utilized for this work is publicly available and can be found [**here**](!https://gist.githubusercontent.com/Ewiseman/b251e5eaf70ca52a4b9b10dce9e635a4/raw/9f0100fe14169a058c451380edca3bda24d3f673/ski_resort_stats.csv)
 
-```{r}
+```{r, message=FALSE}
 # Libraries used for this work
 library(knitr)
 library(leaflet)
