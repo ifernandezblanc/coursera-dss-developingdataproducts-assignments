@@ -19,7 +19,7 @@ Data is being download from the web [**"Yahoo Finance"**](!https://finance.yahoo
 
 ## Setup
 
-```{r download, echo = TRUE}
+```{r download, echo = TRUE, message = FALSE, warning = FALSE}
 # Setup libraries
 library(plotly)
 library(BatchGetSymbols)
