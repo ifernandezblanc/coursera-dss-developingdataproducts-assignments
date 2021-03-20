@@ -1,0 +1,55 @@
+---
+title: "Developing data products Week 3 Assignment"
+author: "Iñigo Fernández del Amo"
+date: "March 20, 2021"
+output: ioslides_presentation
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE)
+```
+
+## Objective
+
+This assignment aims to generate a candlestick chart for last years' Bitcoin prices using Plotly.
+
+Data is being download from the web [**"Yahoo Finance"**](!https://finance.yahoo.com/quote/BTC-USD?p=BTC-USD&.tsrc=fin-srch).
+
+[**BatchGetSymbols package**](!https://finance.yahoo.com/quote/BTC-USD?p=BTC-USD&.tsrc=fin-srch) is used to download this data.
+
+## Setup
+
+```{r download, echo = TRUE}
+# Setup libraries
+library(plotly)
+library(BatchGetSymbols)
+
+# Setup dates to march financial values
+firstDate <- Sys.Date()-365
+lastDate <- Sys.Date()
+
+# Download Bitcoin data from web using BatchGetSymbols:
+btcData <- BatchGetSymbols(c("BTC-USD"), firstDate, lastDate)
+
+# Propose some colors to visualize last year's Bitcoin prices
+incColor <- list(line = list(color = '#17BECF'))
+decColor <- list(line = list(color = '#7F7F7F'))
+```
+
+## Code
+
+```{r plotting, echo = TRUE}
+# Create a candlestick chart to visualize last year's prices
+btcPlot <- btcData$df.tickers %>% 
+    plot_ly(x = ~ref.date, type = "candlestick", 
+            open = ~price.open, close = ~price.close, 
+            high = ~price.high, low = ~price.low, 
+            increasing = incColor, decreasing = decColor)
+```
+
+## Bitcoin prices 2020-2021
+
+```{r visualization, warning = FALSE}
+btcPlot
+```
+
