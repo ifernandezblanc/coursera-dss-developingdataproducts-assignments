@@ -7,6 +7,8 @@ output: ioslides_presentation
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
+knitr::opts_chunk$set(message = FALSE)
+knitr::opts_chunk$set(warning = FALSE)
 ```
 
 ## Objective
@@ -19,7 +21,7 @@ Data is being download from the web [**"Yahoo Finance"**](!https://finance.yahoo
 
 ## Setup
 
-```{r download, echo = TRUE, message = FALSE, warning = FALSE}
+```{r download, echo = TRUE}
 # Setup libraries
 library(plotly)
 library(BatchGetSymbols)
@@ -49,7 +51,7 @@ btcPlot <- btcData$df.tickers %>%
 
 ## Bitcoin prices 2020-2021
 
-```{r visualization, warning = FALSE}
+```{r visualization}
 btcPlot
 ```
 
